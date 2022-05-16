@@ -32,6 +32,7 @@ class DiscussionsController < ApplicationController
     def update
         respond_to do |format|
             if @discussion.update(discussion_params)
+                @discussion.broadcast_replace(partial: "discussions/header", locals: { discussion: @discussion })
                 format.html { redirect_to @discussion, notice: "Discussion updated" }
             else
                 format.html { render :edit, status: :unprocessable_entity }
@@ -41,8 +42,8 @@ class DiscussionsController < ApplicationController
     end
 
     def destroy
-        @discussion.destroy! 
-        redirect_to discussion_path, notice: 'Discussion removed'
+        @discussion.destroy!
+        redirect_to discussions_path, notice: 'Discussion removed'
     end
 
     private
